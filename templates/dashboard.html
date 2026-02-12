@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Today's High-Priority Pending Tasks</h2>
+    {% if tasks %}
+        <div class="task-list">
+            {% for task in tasks %}
+                <div class="task-card {% if task.priority == 'High' %}high-priority{% endif %} {% if task.completed %}completed{% endif %}">
+                    <h3>{{ task.title }}</h3>
+                    <p>{{ task.description }}</p>
+                    <div class="task-meta">
+                        Priority: <strong>{{ task.priority }}</strong> | Due: {{ task.due_date.strftime('%Y-%m-%d') }}
+                    </div>
+                    <div class="task-actions">
+                        <form action="/tasks/{{ task.id }}/toggle" method="post" style="display: inline;">
+                            <button type="submit" class="button primary">
+                                {% if task.completed %}Mark Pending{% else %}Mark Complete{% endif %}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No high-priority pending tasks for today. Good job!</p>
+    {% endif %}
+{% endblock %}
